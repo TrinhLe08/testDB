@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEnity } from 'src/entities/user.entity.mysql';
+import { UserMySQLEnity } from 'src/entities/user.entity.mysql';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEnity)
-    private userRepository: Repository<UserEnity>,
+    @InjectRepository(UserMySQLEnity)
+    private userRepository: Repository<UserMySQLEnity>,
   ) {}
 
-  async findAll(): Promise<UserEnity[]> {
+  async findAll(): Promise<UserMySQLEnity[]> {
     return this.userRepository.find();
   }
 
-  async create(user: UserEnity): Promise<UserEnity> {
+  async create(user: UserMySQLEnity): Promise<UserMySQLEnity> {
     return this.userRepository.save(user);
   }
 }
