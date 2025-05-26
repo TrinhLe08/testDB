@@ -10,6 +10,7 @@ import { UserMySQLEnity } from './entities/user.entity.mysql';
 import { UserMySQLModule } from './module/user.mySQL/user.module';
 import { UserPostgresQLEnity } from './entities/user.entity.postgresql';
 import { UserPostgresQLModule } from './module/user.postgresSQL/user.module';
+import { RedisConfigModule } from './module/user.redis/redis.module';
 
 dotenv.config();
 
@@ -43,7 +44,7 @@ dotenv.config();
   imports: [
     ConfigModule.forRoot(), // Load .env
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, RedisConfigModule],
       useFactory: (configService: ConfigService) => ({
         //  type: 'mysql',
         type: 'postgres',
@@ -59,7 +60,9 @@ dotenv.config();
       inject: [ConfigService],
     }),
     // UserMySQLModule
-    UserPostgresQLModule
+    UserPostgresQLModule, RedisConfigModule
   ],
+    controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
