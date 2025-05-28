@@ -9,8 +9,9 @@ import { UserMongoDBModule } from './module/user.mongoDB/user.module';
 import { UserMySQLEnity } from './entities/user.entity.mysql';
 import { UserMySQLModule } from './module/user.mySQL/user.module';
 import { UserPostgresQLEnity } from './entities/user.entity.postgresql';
-import { UserPostgresQLModule } from './module/user.postgresSQL/user.module';
+import { UserPostgresQLModule } from './module/user.postgresQL/user.module';
 import { RedisConfigModule } from './module/user.redis/redis.module';
+import { GraphqlModule } from './graphql.module';
 
 dotenv.config();
 
@@ -60,7 +61,7 @@ dotenv.config();
       inject: [ConfigService],
     }),
     // UserMySQLModule
-    UserPostgresQLModule, RedisConfigModule
+    UserPostgresQLModule, RedisConfigModule, GraphqlModule
   ],
     controllers: [AppController],
   providers: [AppService],
