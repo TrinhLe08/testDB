@@ -12,6 +12,8 @@ import { UserPostgresQLEnity } from './entities/user.entity.postgresql';
 import { UserPostgresQLModule } from './module/user.postgresQL/user.module';
 import { RedisConfigModule } from './module/user.redis/redis.module';
 import { GraphqlModule } from './graphql.module';
+import { BookModule } from './module/book.postgresQL/book.module';
+import { BookGragQLPostgresQLEntity } from './entities/book.grapQL.postgresql/book.entity';
 
 dotenv.config();
 
@@ -55,13 +57,13 @@ dotenv.config();
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         // entities: [UserMySQLEnity],
-        entities: [UserPostgresQLEnity],
+        entities: [UserPostgresQLEnity, BookGragQLPostgresQLEntity],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
     // UserMySQLModule
-    UserPostgresQLModule, RedisConfigModule, GraphqlModule
+    UserPostgresQLModule, RedisConfigModule, GraphqlModule, BookModule
   ],
     controllers: [AppController],
   providers: [AppService],

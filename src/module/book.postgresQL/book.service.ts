@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { BookGragQLPostgresQL } from 'src/entities/book.grapQL.postgresql/book.entity';
+import { BookGragQLPostgresQLEntity } from 'src/entities/book.grapQL.postgresql/book.entity';
 import { CreateBookInputGragQL } from 'src/entities/book.grapQL.postgresql/dto/create-book.input';
 
 @Injectable()
 export class BookService {
-  private books: BookGragQLPostgresQL[] = []; // In-memory store for demo
+  private books: BookGragQLPostgresQLEntity[] = []; // In-memory store for demo
 
-  findAll(): BookGragQLPostgresQL[] {
+  findAll(): BookGragQLPostgresQLEntity[] {
     return this.books;
   }
 
-  findOne(id: string): BookGragQLPostgresQL | undefined {
+  findOne(id: string): BookGragQLPostgresQLEntity | undefined {
     return this.books.find(book => book.id === id);
   }
 
-  create(createBookInput: CreateBookInputGragQL): BookGragQLPostgresQL {
-    const newBook: BookGragQLPostgresQL = {
+  create(createBookInput: CreateBookInputGragQL): BookGragQLPostgresQLEntity {
+    const newBook: BookGragQLPostgresQLEntity = {
       id: Date.now().toString(),
       createdAt: new Date(),
       ...createBookInput,
@@ -24,7 +24,7 @@ export class BookService {
     return newBook;
   }
 
-  update(id: string, updateBookInput: CreateBookInputGragQL): BookGragQLPostgresQL {
+  update(id: string, updateBookInput: CreateBookInputGragQL): BookGragQLPostgresQLEntity {
     const index = this.books.findIndex(book => book.id === id);
     if (index === -1) {
       throw new Error('Book not found');

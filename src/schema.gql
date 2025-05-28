@@ -1,0 +1,33 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type BookGragQLPostgresQLEntity {
+  id: ID!
+  title: String!
+  author: String!
+  description: String
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  books: [BookGragQLPostgresQLEntity!]!
+  book(id: ID!): BookGragQLPostgresQLEntity
+}
+
+type Mutation {
+  createBook(createBookInput: CreateBookInputGragQL!): BookGragQLPostgresQLEntity!
+  updateBook(id: ID!, updateBookInput: CreateBookInputGragQL!): BookGragQLPostgresQLEntity!
+  removeBook(id: ID!): Boolean!
+}
+
+input CreateBookInputGragQL {
+  title: String!
+  author: String!
+  description: String
+}
