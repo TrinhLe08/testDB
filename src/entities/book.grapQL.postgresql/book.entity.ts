@@ -2,14 +2,14 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @ObjectType()
-@Entity() // 👈 Thêm decorator TypeORM
+@Entity() 
 export class BookGragQLPostgresQLEntity {
   @Field(() => ID)
-  @PrimaryGeneratedColumn('uuid') // 👈 Khai báo primary key
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Field()
-  @Column() // 👈 Ánh xạ vào cột database
+  @Column() 
   title: string;
 
   @Field()
@@ -17,10 +17,10 @@ export class BookGragQLPostgresQLEntity {
   author: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true }) // 👈 Cho phép NULL trong database
+  @Column({ nullable: true }) 
   description?: string;
 
   @Field()
-  @CreateDateColumn() // 👈 Tự động tạo timestamp
+  @CreateDateColumn()
   createdAt: Date;
 }

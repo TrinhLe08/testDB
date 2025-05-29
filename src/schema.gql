@@ -22,11 +22,17 @@ type Query {
 
 type Mutation {
   createBook(createBookInput: CreateBookInputGragQL!): BookGragQLPostgresQLEntity!
-  updateBook(id: ID!, updateBookInput: CreateBookInputGragQL!): BookGragQLPostgresQLEntity!
+  updateBook(id: ID!, updateBookInput: UpdateBookInputGragQL!): BookGragQLPostgresQLEntity!
   removeBook(id: ID!): Boolean!
 }
 
 input CreateBookInputGragQL {
+  title: String!
+  author: String!
+  description: String
+}
+
+input UpdateBookInputGragQL {
   title: String!
   author: String!
   description: String

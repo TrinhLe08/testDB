@@ -1,41 +1,44 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { BookGragQLPostgresQLEntity } from 'src/entities/book.grapQL.postgresql/book.entity';
 import { CreateBookInputGragQL } from 'src/entities/book.grapQL.postgresql/dto/create-book.input';
+import { Repository } from 'typeorm';
+
 
 @Injectable()
 export class BookService {
-  private books: BookGragQLPostgresQLEntity[] = []; // In-memory store for demo
+    constructor(
+        @InjectRepository(BookGragQLPostgresQLEntity)
+        private booksRepository: Repository<BookGragQLPostgresQLEntity>,
+    ) {}
 
-  findAll(): BookGragQLPostgresQLEntity[] {
-    return this.books;
-  }
-
-  findOne(id: string): BookGragQLPostgresQLEntity | undefined {
-    return this.books.find(book => book.id === id);
-  }
-
-  create(createBookInput: CreateBookInputGragQL): BookGragQLPostgresQLEntity {
-    const newBook: BookGragQLPostgresQLEntity = {
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      ...createBookInput,
-    };
-    this.books.push(newBook);
-    return newBook;
-  }
-
-  update(id: string, updateBookInput: CreateBookInputGragQL): BookGragQLPostgresQLEntity {
-    const index = this.books.findIndex(book => book.id === id);
-    if (index === -1) {
-      throw new Error('Book not found');
+    async findAll(): Promise<BookGragQLPostgresQLEntity[]> {
+        return this.booksRepository.find();
     }
-    this.books[index] = { ...this.books[index], ...updateBookInput };
-    return this.books[index];
-  }
 
-  remove(id: string): boolean {
-    const initialLength = this.books.length;
-    this.books = this.books.filter(book => book.id !== id);
-    return this.books.length !== initialLength;
-  }
+    async findOne(id: string): Promise<BookGragQLPostgresQLEntity | undefined> {
+        return this.booksRepository.findOneBy({ id });
+    }
+
+    async create(createBookInput: CreateBookInputGragQL): Promise<BookGragQLPostgresQLEntity> {
+        const newBook = this.booksRepository.create({
+            ...createBookInput,
+            createdAt: new Date(),
+        });
+        return this.booksRepository.save(newBook);
+    }
+
+    async update(id: string, updateBookInput: CreateBookInputGragQL): Promise<BookGragQLPostgresQLEntity> {
+        const book = await this.findOne(id);
+        if (!book) {
+            throw new Error('Book not found');
+        }
+        Object.assign(book, updateBookInput);
+        return this.booksRepository.save(book);
+    }
+
+    async remove(id: string): Promise<boolean> {
+        const result = await this.booksRepository.delete(id);
+        return result.affected > 0; // Trả về true nếu có cuốn sách bị xóa
+    }
 }
