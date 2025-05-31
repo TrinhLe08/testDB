@@ -1,18 +1,23 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { UserPostgresQLEnity } from 'src/entities/user.entity.postgresql';
+import { UserPostgreSQLEntity } from 'src/entities/user.entity.postgresql';
+import { SwaggerGetAllUsers, SwaggerCreateUser } from './swagger.decorator';
 
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async findAll(): Promise<UserPostgresQLEnity[]> {
+  @SwaggerGetAllUsers() 
+  async findAll(): Promise<UserPostgreSQLEntity[]> {
     return this.userService.findAll();
   }
 
   @Post()
-  async create(@Body() user: UserPostgresQLEnity): Promise<UserPostgresQLEnity> {
+  @SwaggerCreateUser()
+  async create(@Body() user: UserPostgreSQLEntity): Promise<UserPostgreSQLEntity> {
     return this.userService.create(user);
   }
 }
