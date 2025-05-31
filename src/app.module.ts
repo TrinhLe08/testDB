@@ -41,7 +41,7 @@ dotenv.config();
 
 
 
-//mySQL & postgresQL 
+//mySQL & postgresQL & redis
 
 @Module({
   imports: [
