@@ -72,7 +72,7 @@ dotenv.config();
       inject: [ConfigService],
     }),
     // UserMySQLModule
-    // UserPostgresQLModule, RedisConfigModule, GraphqlModule, BookModule
+    UserPostgresQLModule, RedisConfigModule, GraphqlModule, BookModule
   ],
    controllers: [AppController],
    providers: [AppService, JwtService,  {
