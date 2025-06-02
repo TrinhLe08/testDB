@@ -16,8 +16,7 @@ export class UserPostgreSQLEntity  {
   @ApiProperty({ description: 'Email', example: 'user@example.com' })
   email: string;
 
-  @Exclude() 
-  @Column({ select: false })
+  @Column()
   @ApiProperty({ 
   description: 'Mật khẩu (đã mã hóa)', 
   example: '$2a$10$xyz...', 

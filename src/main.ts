@@ -2,12 +2,22 @@ declare const module: any;
 
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as express from 'express';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerExceptionFilter } from './global/globalErrorRateLimit';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
+    console.log(ThrottlerGuard);
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // Thêm dòng này
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true })); 
+  const throttlerGuard = app.get(ThrottlerGuard);
+  app.useGlobalGuards(throttlerGuard);
+  app.useGlobalFilters(new ThrottlerExceptionFilter());
+  app.use(express.json());
+
+
 
   const config = new DocumentBuilder()
     .setTitle('Test DB API')

@@ -1,22 +1,56 @@
 import { Injectable, BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { ResponseData } from 'src/global/globalClass';
+import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
 import { UserPostgreSQLEntity } from './../../entities/user.entity.postgresql';
+import { JwtService } from 'src/global/gobalJwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserPostgreSQLEntity)
     private userRepository: Repository<UserPostgreSQLEntity>,
+    private readonly jwtService: JwtService
   ) {}
 
   async findAll(): Promise<UserPostgreSQLEntity[]> {
     return this.userRepository.find();
   }
 
+  async findByEmail(email: string): Promise<UserPostgreSQLEntity> {
+    return this.userRepository.findOne({ where: { email: email } });
+  }
 
-  async create(user: UserPostgreSQLEntity): Promise<Partial<UserPostgreSQLEntity>> {
+  async login(email: string, password : string ) : Promise<any> {
+    try {
+      const checkInformationUserByEmail = await this.findByEmail(email);
+      if (checkInformationUserByEmail && checkInformationUserByEmail.password == password) {
+        const payload = {checkInformationUserByEmail}
+        const token = this.jwtService.sign(payload)
+        return new ResponseData<{acccessToken : string}>(
+          {acccessToken : token},
+          HttpStatus.SUCCESS,
+          HttpMessage.SUCCESS,
+        );
+      } else {
+        return new ResponseData<string>(
+          'Wrong Information',
+          HttpStatus.ERROR,
+          HttpMessage.ERROR,
+        );
+      }
+    } catch(err) {
+      console.log(err);
+       return new ResponseData<string>(
+          'Wrong Information',
+          HttpStatus.ERROR,
+          HttpMessage.ERROR,
+        );
+    }
+  }
+
+  async create(user: any): Promise<Partial<any>> {
       if (!user.email || !user.password) {
     throw new BadRequestException('Email and password are required');
   }
