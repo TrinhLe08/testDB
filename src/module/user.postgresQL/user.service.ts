@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserPostgreSQLEntity } from 'src/entities/user.entity.postgresql';
+import * as bcrypt from 'bcrypt';
+import { UserPostgreSQLEntity } from './../../entities/user.entity.postgresql';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -13,7 +15,13 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  async create(user: UserPostgreSQLEntity): Promise<UserPostgreSQLEntity> {
-    return this.userRepository.save(user);
+
+  async create(user: UserPostgreSQLEntity): Promise<Partial<UserPostgreSQLEntity>> {
+      if (!user.email || !user.password) {
+    throw new BadRequestException('Email and password are required');
   }
+  const createdUser = await this.userRepository.save(user);
+  const { password, ...result } = createdUser;
+  return result;
+}
 }

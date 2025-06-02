@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BookGragQLPostgresQLEntity } from 'src/entities/book.grapQL.postgresql/book.entity';
-import { CreateBookInputGragQL } from 'src/entities/book.grapQL.postgresql/dto/create-book.input';
 import { Repository } from 'typeorm';
+import { BookGragQLPostgresQLEntity } from '../../entities/book.grapQL.postgresql/book.entity';
+import { CreateBookInputGragQL } from '../../entities/book.grapQL.postgresql/dto/create-book.input';
 
 
 @Injectable()

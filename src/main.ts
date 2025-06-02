@@ -1,11 +1,13 @@
 declare const module: any;
 
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // Thêm dòng này
 
   const config = new DocumentBuilder()
     .setTitle('Test DB API')
@@ -19,7 +21,8 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 10000);
       console.log(`Server is running on http://localhost:${process.env.PORT}`);
-  console.log(`Swagger UI: http://localhost:${process.env.PORT}/api-docs`);
+      console.log(`Swagger UI: http://localhost:${process.env.PORT}/api-docs`);
+  
     if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());  

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserPostgreSQLEntity } from 'src/entities/user.entity.postgresql';
+import { UserPostgreSQLEntity } from './../../entities/user.entity.postgresql';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 

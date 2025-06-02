@@ -1,4 +1,4 @@
-import { UserPostgreSQLEntity } from 'src/entities/user.entity.postgresql';
+import { UserPostgreSQLEntity } from './../../entities/user.entity.postgresql';
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiBody, ApiQuery } from '@nestjs/swagger';
 
@@ -8,6 +8,7 @@ export function SwaggerGetAllUsers() {
       summary: 'Lấy danh sách users',
       description: 'Trả về tất cả users (có phân trang và filter).',
     }),
+    //GET /users?page=2&limit=5
     ApiQuery({
       name: 'page',
       required: false,

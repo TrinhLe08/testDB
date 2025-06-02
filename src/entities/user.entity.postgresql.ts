@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
     
 @Entity()
@@ -15,12 +16,13 @@ export class UserPostgreSQLEntity  {
   @ApiProperty({ description: 'Email', example: 'user@example.com' })
   email: string;
 
-@Column()
-@ApiProperty({ 
+  @Exclude() 
+  @Column({ select: false })
+  @ApiProperty({ 
   description: 'Mật khẩu (đã mã hóa)', 
   example: '$2a$10$xyz...', 
   writeOnly: true 
-})
-password: string;
+  })
+  password: string;
 }
 

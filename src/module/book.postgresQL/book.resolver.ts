@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
-import { BookGragQLPostgresQLEntity } from 'src/entities/book.grapQL.postgresql/book.entity';
+import { BookGragQLPostgresQLEntity } from '../../entities/book.grapQL.postgresql/book.entity';
 import { BookService } from './book.service';
-import { CreateBookInputGragQL } from 'src/entities/book.grapQL.postgresql/dto/create-book.input';
-import { UpdateBookInputGragQL } from 'src/entities/book.grapQL.postgresql/dto/update-book.input';
+import { CreateBookInputGragQL } from '../../entities/book.grapQL.postgresql/dto/create-book.input';
+import { UpdateBookInputGragQL } from '../../entities/book.grapQL.postgresql/dto/update-book.input';
 
 @Resolver(() => BookGragQLPostgresQLEntity)
 export class BookResolver {
