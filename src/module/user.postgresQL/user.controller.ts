@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-// import { Throttle, SkipThrottle } from '@nestjs/throttler';
+import { Throttle, SkipThrottle } from '@nestjs/throttler';
 import { ResponseData } from 'src/global/globalClass';
 import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
 import { UserService } from './user.service';
@@ -18,7 +18,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  // @Throttle({ default: { limit: 5, ttl: 30000 }})
+  @Throttle({ default: { limit: 5, ttl: 30000 }})
   @Post('login')
   async loginUser(@Body() userInformation : {email : string, password : string}) :Promise<any> {
     try {

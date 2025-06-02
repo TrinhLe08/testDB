@@ -78,7 +78,8 @@ dotenv.config();
    providers: [AppService, JwtService,  {
       provide: APP_GUARD,
       useClass: ThrottlerGuard ,
-    },],
+    },
+  ],
    exports: [JwtService],
 })
 

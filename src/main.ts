@@ -12,12 +12,10 @@ async function bootstrap() {
     console.log(ThrottlerGuard);
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true })); 
-  const throttlerGuard = app.get(ThrottlerGuard);
-  app.useGlobalGuards(throttlerGuard);
+  // const throttlerGuard = app.get(ThrottlerGuard);
+  // app.useGlobalGuards(throttlerGuard);
   app.useGlobalFilters(new ThrottlerExceptionFilter());
   app.use(express.json());
-
-
 
   const config = new DocumentBuilder()
     .setTitle('Test DB API')
