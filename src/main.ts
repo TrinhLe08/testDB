@@ -9,7 +9,6 @@ import { ThrottlerExceptionFilter } from './global/globalErrorRateLimit';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-    console.log(ThrottlerGuard);
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true })); 
   app.useGlobalFilters(new ThrottlerExceptionFilter());

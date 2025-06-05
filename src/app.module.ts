@@ -18,6 +18,7 @@ import { GraphqlModule } from './graphql.module';
 import { BookModule } from './module/book.postgresQL/book.module';
 import { BookGragQLPostgresQLEntity } from './entities/book.grapQL.postgresql/book.entity';
 import { CheckTokenMiddleware } from './middlewares/user.checkToken';
+import { RabbitMQModule } from './module/rabbitMQ/rabbitmq.module';
 
 dotenv.config();
 
@@ -56,7 +57,7 @@ dotenv.config();
       }]
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule, RedisConfigModule, ],
+      imports: [ConfigModule, RedisConfigModule],
       useFactory: (configService: ConfigService) => ({
         //  type: 'mysql',
         type: 'postgres',
@@ -72,7 +73,7 @@ dotenv.config();
       inject: [ConfigService],
     }),
     // UserMySQLModule
-    UserPostgresQLModule, RedisConfigModule, GraphqlModule, BookModule
+    UserPostgresQLModule, RedisConfigModule, GraphqlModule, BookModule, RabbitMQModule
   ],
    controllers: [AppController],
    providers: [AppService, JwtService,  {
