@@ -14,16 +14,16 @@ export class RabbitMQService implements OnModuleInit {
   constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
-    await this.initialize();
+    await this.Connect();
   }
 
-    async waitForInit(): Promise<void> {
+  async waitForInit(): Promise<void> {
     if (!this.isInitialized) {
       await this.initPromise;
     }
   }
 
-  private async initialize() {
+  private async Connect() {
     const url = this.configService.get<string>('RABBITMQ_URL');
     this.connection = connect([url]);
 
@@ -39,7 +39,6 @@ export class RabbitMQService implements OnModuleInit {
     console.log('RabbitMQ connected!');
   }
 
-  // Gửi message vào queue
   async sendToQueue(queue: string, message: any) {
     if (!this.isInitialized) {
       throw new Error('RabbitMQ not initialized');
@@ -55,7 +54,7 @@ export class RabbitMQService implements OnModuleInit {
   }
 
   // Nhận message từ queue
-async consume(queue: string, callback: (msg: any) => void) {
+async consumeReceiveToQueue(queue: string, callback: (msg: any) => void) {
   await this.waitForInit();
   
   try {

@@ -24,7 +24,11 @@ export class UserController {
   async sendMessage() {
     const message = { id: 1, text: 'Hello RabbitMQ!' };
     await this.rabbitMQService.sendToQueue('user_queue', message);
-    return { status: 'Message sent!' };
+        return new ResponseData<string>(
+                  'Message Send !',
+                  HttpStatus.SUCCESS,
+                  HttpMessage.SUCCESS,
+                );
   }
 
 

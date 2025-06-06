@@ -65,8 +65,16 @@ export class UserService {
 
  async onModuleInit() {
     const rabbitMQService = await this.moduleRef.get(RabbitMQService, { strict: false });
-    await rabbitMQService.consume('user_queue', (msg) => {
-      console.log('Received:', msg);
-    });
+     await rabbitMQService.consumeReceiveToQueue('user_queue', async (msg) => {
+      try {
+        console.log('Received:', msg);
+        
+        return true; // Ack message
+      } catch (error) {
+        console.error('Error processing message:', error);
+        return false; // Nack message
+      }
+    },);
+    return ;
   }
 }
