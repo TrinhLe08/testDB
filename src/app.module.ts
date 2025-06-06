@@ -81,7 +81,7 @@ dotenv.config();
       useClass: ThrottlerGuard ,
     },
   ],
-   exports: [JwtService],
+   exports: [JwtService, RabbitMQModule],
 })
 
 export class AppModule {

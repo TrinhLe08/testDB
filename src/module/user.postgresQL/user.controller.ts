@@ -6,17 +6,27 @@ import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
 import { UserService } from './user.service';
 import { UserPostgreSQLEntity } from './../../entities/user.entity.postgresql';
 import { SwaggerGetAllUsers, SwaggerCreateUser } from './swagger.decorator';
+import { RabbitMQService } from '../rabbitMQ/rabbitmq.service';
 
 @ApiTags('users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
-
+  constructor(private readonly userService: UserService, 
+              private readonly rabbitMQService: RabbitMQService) {}
+  
   @Get()
   @SwaggerGetAllUsers() 
   async findAll(): Promise<UserPostgreSQLEntity[]> {
     return this.userService.findAll();
   }
+
+  @Get('send')
+  async sendMessage() {
+    const message = { id: 1, text: 'Hello RabbitMQ!' };
+    await this.rabbitMQService.sendToQueue('user_queue', message);
+    return { status: 'Message sent!' };
+  }
+
 
   @Throttle({ default: { limit: 5, ttl: 30000 }})
   @Post('login')

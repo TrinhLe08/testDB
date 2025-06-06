@@ -1,17 +1,21 @@
 import { Injectable, BadRequestException  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ModuleRef } from '@nestjs/core';
 import { Repository } from 'typeorm';
 import { ResponseData } from 'src/global/globalClass';
 import { HttpMessage, HttpStatus } from 'src/global/globalEnum';
 import { UserPostgreSQLEntity } from './../../entities/user.entity.postgresql';
 import { JwtService } from 'src/global/gobalJwt';
+import { RabbitMQService } from '../rabbitMQ/rabbitmq.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserPostgreSQLEntity)
     private userRepository: Repository<UserPostgreSQLEntity>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly rabbitMQService: RabbitMQService,
+    private readonly moduleRef: ModuleRef
   ) {}
 
   async findAll(): Promise<UserPostgreSQLEntity[]> {
@@ -58,4 +62,11 @@ export class UserService {
   const { password, ...result } = createdUser;
   return result;
 }
+
+ async onModuleInit() {
+    const rabbitMQService = await this.moduleRef.get(RabbitMQService, { strict: false });
+    await rabbitMQService.consume('user_queue', (msg) => {
+      console.log('Received:', msg);
+    });
+  }
 }
