@@ -39,21 +39,35 @@ export class RabbitMQService implements OnModuleInit {
     console.log('RabbitMQ connected!');
   }
 
-  async sendToQueue(queue: string, message: any) {
-    if (!this.isInitialized) {
-      throw new Error('RabbitMQ not initialized');
-    }
+async sendToQueue(
+  queue: string,
+  message: any,
+  maxRetries: number = 3,
+  retryDelay: number = 1000
+) {
+  if (!this.isInitialized) throw new Error('RabbitMQ not ready');
 
+  let lastError: Error;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await this.channelWrapper.sendToQueue(queue, message);
-      console.log(`Message sent to ${queue}:`, message);
+    await this.channelWrapper.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {
+      persistent: true
+    } as any);
+      return; // Thành công thì thoát
     } catch (error) {
-      console.error('Error sending message:', error);
-      throw error;
+      lastError = error;
+      console.error(`Attempt ${attempt} failed for ${queue}:`, error);
+      
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+      }
     }
   }
 
-  // Nhận message từ queue
+  throw new Error(`Failed after ${maxRetries} attempts: ${lastError.message}`);
+}
+
 async consumeReceiveToQueue(queue: string, callback: (msg: any) => void) {
   await this.waitForInit();
   

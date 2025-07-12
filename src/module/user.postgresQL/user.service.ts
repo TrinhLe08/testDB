@@ -67,7 +67,12 @@ export class UserService {
     const rabbitMQService = await this.moduleRef.get(RabbitMQService, { strict: false });
      await rabbitMQService.consumeReceiveToQueue('user_queue', async (msg) => {
       try {
-        console.log('Received:', msg);
+        const buffer = Buffer.from(msg.data)
+        const jsonString = buffer.toString('utf-8');
+        console.log(jsonString);
+
+        const jsonObject = JSON.parse(jsonString);
+        console.log("Received:",jsonObject);
         
         return true; // Ack message
       } catch (error) {
